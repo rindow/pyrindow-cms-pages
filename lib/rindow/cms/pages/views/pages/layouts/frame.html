@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html{% if site.lang %} lang="{{ site.lang }}"{% endif %}>
+{% include "pages/includes/head.html" %}
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set wallpaper_image = theme.get('wallpaper_image',site,page) %}
+{% set wallpaper_pattern = theme.get('wallpaper_pattern',site,page) %}
+{% set wallpaper_repeat = theme.get('wallpaper_repeat',site,page) %}
+{% set content_text_color = theme.get('content_text_color',site,page) %}
+	{% if wallpaper_image %}
+		{% set body_style = 'background-image: url(' + site.baseurl + wallpaper_image + ');' %}
+		{% if wallpaper_repeat %}
+			{% set body_style = body_style + 'background-repeat: ' + wallpaper_repeat + ';' %}
+		{% else %}
+			{% set body_style = body_style + 'background-size: contain;' %}
+		{% endif %}
+	{% elif wallpaper_pattern %}
+		{% set body_style = 'background-image: ' + wallpaper_pattern +';' %}
+	{% endif %}
+	{% if content_text_color %}
+		{% set body_style = body_style + 'color: ' + content_text_color +';' %}
+	{% endif %}
+  <body{% if body_style %} style="{{ body_style }}"{% endif %}>
+    {% include "pages/includes/top-scripts.html" %}
+    {% block layout %}{% endblock %}
+    {% include "pages/includes/bottom-scripts.html" %}
+  </body>
+</html>

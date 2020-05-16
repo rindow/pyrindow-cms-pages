@@ -1,0 +1,19 @@
+{% macro exec(options,data,site) -%}
+<div class="widgetwrapper widget-categories">
+  <h4>{% if options.caption %}{{ options.caption }}{% else %}Categories{% endif %}</h4>
+  <ul>
+    {% for category in site.categories %}
+      {% set cat_name = category[0] %}
+      {% if data[cat_name] %}
+        <li>
+          <a href="{% include get-category-url category=cat_name %}">{{ cat_name }} <span class="badge">{{ category[1] | length }}</span></a>
+        </li>
+      {% else %}
+        {% if cat_name != "highlight" and cat_name != "pinup" %}
+          <li>{{ cat_name }} <span class="badge">{{ category[1] | length }}</span></li>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}

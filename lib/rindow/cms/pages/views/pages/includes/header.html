@@ -1,0 +1,41 @@
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set header_title_class = theme.get('header_title_class',site,page) %}
+{% set header_description_class = theme.get('header_description_class',site,page) %}
+{% if page.collection %}
+  {% set header = page.collection %}
+{% elif page.type == "blog" %}
+  {% set header = site.blog %}
+{% else %}
+  {% set header = page %}
+{% endif %}
+{% if header.header_style != "disable" and page.header_style != "disable" %}
+  {% set header_image = theme.get('header_image',site,page) %}
+  {% set header_pattern = theme.get('header_pattern',site,page) %}
+  {% set header_text_color = theme.get('header_text_color',site,page) %}
+  {% if header_image and header_image != "disable" %}
+    {% set jumbotron_style = 'background-image: url(' + site.baseurl + header_image + ');' + 'background-size: cover;' %}
+  {% elif header_pattern %}
+    {% if header_pattern == 'transparent' %}
+      {% set jumbotron_style = 'background-color: transparent;' %}
+    {% else %}
+      {% set jumbotron_style = 'background-image: ' + header_pattern + ';' %}
+    {% endif %}
+  {% endif %}
+  {% if header_text_color %}
+    {% set jumbotron_text_style = 'color: ' + header_text_color + ';' %}
+  {% endif %}
+
+{% autoescape false %}
+<div role="banner" class="jumbotron"{% if jumbotron_style %} style="{{ jumbotron_style }}"{% endif %}>
+  <div class="container">
+  {% if header.title %}
+    <h1 class="{{ header_title_class }}"{% if jumbotron_text_style %} style="{{ jumbotron_text_style }}"{% endif %}>{{ header.title }}</h1>
+    <p class="{{ header_description_class }}"{% if jumbotron_text_style %} style="{{ jumbotron_text_style }}"{% endif %}>{{ header.description }}</p>
+  {% else %}
+    <h1 class="{{ header_title_class }}"{% if jumbotron_text_style %} style="{{ jumbotron_text_style }}"{% endif %}>{{ site.title }}</h1>
+    <p class="{{ header_description_class }}"{% if jumbotron_text_style %} style="{{ jumbotron_text_style }}"{% endif %}>{{ site.description }}</p>
+  {% endif %}
+  </div>
+</div>
+{% endautoescape %}
+{% endif %}

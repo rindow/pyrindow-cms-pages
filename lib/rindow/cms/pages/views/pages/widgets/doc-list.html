@@ -1,0 +1,10 @@
+{% macro list(caption=none,docs=[]) -%}
+<div class="widgetwrapper widget-doc-list">
+{% if caption %}<h2>{{ caption }}</h2>{% endif %}
+  <ul>
+  {% for doc in docs %}
+    {% if doc != page %}<li><a href="{{ doc.url }}">{{ doc.title }}</a></li>{% endif %}
+  {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}

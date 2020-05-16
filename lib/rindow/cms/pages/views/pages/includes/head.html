@@ -1,0 +1,62 @@
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set frameworkcss = theme.get('frameworkcss',site,page) %}
+{% set frameworkcsstheme = theme.get('frameworkcsstheme',site,page) %}
+{% set css = theme.get('css',site,page) %}
+{% set lessjs = theme.get('lessjs',site,page) %}
+{% set lessoption = theme.get('lessoption',site,page) %}
+{% set less = theme.get('less',site,page) %}
+{% set font1 = theme.get('font1',site,page) %}
+{% set font2 = theme.get('font2',site,page) %}
+{% set font3 = theme.get('font3',site,page) %}
+{% set touch_icon = theme.get('touch_icon',site,page) %}
+{% set favicon = theme.get('favicon',site,page) %}
+{% if page.collection %}{% set header = page.collection %}
+{% elif page.type == "blog" %}{% set header = site.blog %}
+{% endif %}
+{% set title = "" %}
+{% if page.title %}{% set title = page.title %}{% endif %}
+{% if header and header.title %}{% if title %}{% set title = title + ' : ' %}{% endif %}{% set title = title + header.title %}{% endif %}
+{% if site.title %}{% if title %}{% set title = title + ' : ' %}{% endif %}{% set title = title + site.title %}{% endif %}
+{% if page.meta_description %}{% set meta_description = page.meta_description %}
+{% elif header.meta_description %}{% set meta_description = header.meta_description %}
+{% else %}{% set meta_description = site.meta_description %}{% endif %}
+{% if description %}{% else %}
+{% if page.description %}{% set description = page.description %}
+{% elif header.description %}{% set description = header.description %}
+{% else %}{% set description = site.description %}{% endif %}
+{% endif %}
+{% if page.keywords %}{% set keywords = page.keywords %}
+{% elif header.keywords %}{% set keywords = header.keywords %}
+{% else %}{% set keywords = site.keywords %}{% endif %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ title | truncate(64) }}</title>
+  {% if site.google_site_verification %}<meta name="google-site-verification" content="{{ site.google_site_verification }}" />{% endif %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  {% if meta_description != 'disable' %}<meta name="description" content="{{ description }}">{% endif %}
+  {% if keywords %}<meta name="keywords" content="{{ keywords }}">{% endif %}
+  <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url | replace('index.html','')}}">
+  {% if frameworkcss !="" %}<link rel="stylesheet" href="{{ frameworkcss }}">{% endif %}
+  {% if frameworkcsstheme !="" %}<link rel="stylesheet" href="{{ frameworkcsstheme }}">{% endif %}
+  <!-- link rel="stylesheet" href="{{ site.baseurl }}/css/core.css" -->
+  {% if css %}<link rel="stylesheet" href="{{ site.baseurl }}{{ css }}">{% endif %}
+  <!-- client less -->
+  {% if less %}<link rel="stylesheet/less" type="text/css" href="{{ site.baseurl }}{{ less }}">{% endif %}
+  {% if lessoption !="" %}<script>
+    less = { {{ lessoption }} };
+  </script>{% endif %}
+  {% if lessjs !="" %}<script src="{{ lessjs }}"></script>{% endif %}
+  <!-- font css -->
+  {% if font1 !="" %}<link rel="stylesheet" type="text/css" href="{{ font1 }}">{% endif %}
+  {% if font2 !="" %}<link rel="stylesheet" type="text/css" href="{{ font2 }}">{% endif %}
+  {% if font3 !="" %}<link rel="stylesheet" type="text/css" href="{{ font2 }}">{% endif %}
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% if touch_icon !="" %}<link rel="apple-touch-icon-precomposed" href="{{ site.baseurl }}{{ touch_icon }}">{% endif %}
+  {% if favicon !="" %}<link rel="icon" href="{{ site.baseurl }}{{ favicon }}">{% endif %}
+</head>

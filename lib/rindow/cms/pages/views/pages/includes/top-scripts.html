@@ -1,0 +1,11 @@
+{% include "pages/services/google-analytics.html" %}
+{% include "pages/services/facebook-script.html" %}
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set script_top = theme.get('script_top',site,page) %}
+{% if script_top %}
+<script type="text/javascript">
+{% autoescape false %}
+  {{ script_top }}
+{% endautoescape %}
+</script>
+{% endif %}

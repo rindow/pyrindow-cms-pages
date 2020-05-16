@@ -1,0 +1,77 @@
+{% extends "pages/layouts/frame.html" %}
+{% block layout %}
+{% import "pages/includes/sidearea.html" as sidearea %}
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set header_style = theme.get('header_style',site,page) %}
+{% set navbar_layout = theme.get('navbar_layout',site,page) %}
+{% set sidearea_layout = theme.get('sidearea_layout',site,page) %}
+{% if header_style == "fit" %}<div class="container">{% endif %}
+{% if navbar_layout == "top" %}{% include "pages/includes/navbar.html" %}{% endif %}
+{% include "pages/includes/header.html" %}
+{{ sidearea.sidearea("header",site,page) }}
+{% if navbar_layout == "middle" %}{% include "pages/includes/navbar.html" %}{% endif %}
+{% if header_style != "fit" %}<div class="container">{% endif %}
+  <div class="main-container">
+    <div class="row">
+      <div class="col-sm-12">
+        <section id="top">
+        {{ sidearea.sidearea("top",site,page) }}
+        </section>
+      </div>
+    </div>
+    <div class="row">
+    {% if sidearea_layout == "right" %}
+      <div class="col-sm-9">
+        <section id="main">
+    {% elif sidearea_layout == "left" %}
+      <div class="col-sm-9 col-sm-push-3">
+        <section id="main">
+    {% elif sidearea_layout == "both" %}
+      <div class="col-sm-6 col-sm-push-3">
+        <section id="main">
+    {% else %}
+      <div class="col-sm-12">
+        <section id="main">
+    {% endif %}
+        {% block main %}{% endblock %}
+    {% if sidearea_layout == "right" %}
+        </section>
+      </div>
+      <div class="col-sm-3">
+        <section id="side">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+    {% elif sidearea_layout == "left" %}
+        </section>
+      </div>
+      <div class="col-sm-3 col-sm-pull-9">
+        <section id="side">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+    {% elif sidearea_layout == "both" %}
+        </section>
+      </div>
+      <div class="col-sm-3 col-sm-pull-6">
+        <section id="side">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+      <div class="col-sm-3">
+        <section id="side2">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+    {% else %}
+        </section>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+  {% include "pages/includes/footer.html" %}
+{% if header_style != "fit" %}</div><!-- /.container -->{% endif %}
+{% if navbar_layout == "bottom" %}{% include "pages/includes/navbar.html" %}{% endif %}
+{% if header_style == "fit" %}</div><!-- /.container -->{% endif %}
+{{ sidearea.sidearea("floating",site,page) }}
+{% endblock %}

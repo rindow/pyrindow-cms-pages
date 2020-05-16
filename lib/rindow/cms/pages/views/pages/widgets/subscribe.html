@@ -1,0 +1,6 @@
+{% macro exec(options, data,site) -%}
+<div class="widgetwrapper widget-subscribe">
+  <h4>{% if options.caption %}{{ options.caption }}{% else %}Subscribe{% endif %}</h4>
+  <p class="rss-subscribe">subscribe <a href="{{ site.baseurl }}/feed.xml">via RSS</a></p>
+</div>
+{%- endmacro %}

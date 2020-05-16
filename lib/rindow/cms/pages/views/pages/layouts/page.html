@@ -1,0 +1,15 @@
+{% extends "pages/layouts/default.html" %}
+{% block main %}
+<div class="page">
+  {% if page.title_position == "article" %}
+    {% if page.title %}
+    <header class="post-header">
+      <h2>{{ page.title }}</h2>
+    </header>
+    {% endif %}
+  {% endif %}
+  <article class="post-content">
+    {% block content %}{% endblock %}
+  </article>
+</div>
+{% endblock %}
