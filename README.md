@@ -17,3 +17,4 @@ Requirements
 ------------
 - Python 2.7
 - PyRindow Framework 0.1.x
+- Jinja2
