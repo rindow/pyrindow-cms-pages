@@ -1,0 +1,13 @@
+{% macro exec(options,data,site) %}
+<div class="widgetwrapper widget-recentposts">
+  <h4>{% if options.caption %}{{ options.caption }}{% else %}Recent Posts{% endif %}</h4>
+  <ul>
+    {% for post in site.posts %}
+     {%- if loop.index >= 10 %}{% break %}{% endif %}
+     <li>
+        <span class="post-date">{{ post.date | date("%b %-d, %Y") }}</span>
+        <a class="post-link" href="{{ site.baseurl+post.url }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

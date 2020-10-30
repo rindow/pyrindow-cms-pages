@@ -1,0 +1,46 @@
+{% macro navigator(site,page,enable_title=false) -%}
+{% if page.collection and page.collection.navigator != "disable" %}
+{% if enable_title %}
+  {% set previous_page = page.findDocument(page.previous_section) %}
+  {% if previous_page %}{% set previous_title = previous_page.title %}{% endif %}
+  {% set next_page = page.findDocument(page.next_section) %}
+  {% if next_page %}{% set next_title = next_page.title %}{% endif %}
+{% endif %}
+{% if site.section_postfix %}
+  {% set postfix = site.section_postfix %}
+{% else %}
+  {% set postfix = '' %}
+{% endif %}
+<nav role="navigation" class="navigator">
+  {% if enable_title == "top" %}
+    <div class="row">
+      <div class="col-xs-6 text-left">{{ previous_title }}</div>
+      <div class="col-xs-6 text-right">{{ next_title }}</div>
+    </div>
+  {% endif %}
+  <ul class="list-reset center">
+    {% if page.previous_section %}
+      <li class="inline-block mr1"><a href="{{ page.getDocumentUrl(page.collection.name,page.previous_section) }}{{ postfix }}">Previous</a></li>
+    {% else %}
+      <li class="inline-block mr1"><a class="disabled" href="#">Previous</a></li>
+    {% endif %}
+    {% if page.upper_section %}
+      <li class="inline-block mr1"><a href="{{ page.getDocumentUrl(page.collection.name,page.upper_section) }}{{ postfix }}">Up</a></li>
+    {% else %}
+      <li class="inline-block mr1"><a class="disabled" href="#">Up</a></li>
+    {% endif %}
+    {% if page.next_section %}
+      <li class="inline-block mr1"><a href="{{ page.getDocumentUrl(page.collection.name,page.next_section) }}{{ postfix }}">Next</a></li>
+    {% else %}
+      <li class="inline-block mr1"><a class="disabled" href="#">Next</a></li>
+    {% endif %}
+  </ul>
+  {% if enable_title == "bottom" %}
+    <div class="row">
+      <div class="col-xs-6 text-left">{{ previous_title }}</div>
+      <div class="col-xs-6 text-right">{{ next_title }}</div>
+    </div>
+  {% endif %}
+</nav>
+{% endif %}
+{%- endmacro %}

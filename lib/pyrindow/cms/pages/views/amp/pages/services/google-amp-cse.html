@@ -1,0 +1,9 @@
+{% macro exec(nav,site) %}
+<form id="cse-search-box" action-xhr="{{ nav.search.action }}">
+  <input type="hidden" name="cx" value="{{ nav.search.search_engine_id }}" />
+  <input type="hidden" name="ie" value="UTF-8" />
+  <input type="text" name="q" size="{{ nav.search.size }}" />
+  <input type="submit" name="sa" value="{{ nav.caption }}" />
+</form>
+<script type="text/javascript" src="https://www.google.com/cse/brand?form=cse-search-box&lang={{ site.lang }}"></script>
+{%- endmacro %}

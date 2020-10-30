@@ -1,0 +1,37 @@
+{% macro exec(options,data,site) %}
+<div class="widgetwrapper widget-links">
+  {% if options.anchor %}<a name="{{ options.anchor }}"></a>{% endif %}
+  {% if options.caption %}<h4>{{ options.caption }}</h4>{% endif %}
+  <ul class="list-reset">
+  {% for nav in data[options.item] %}
+    {% if nav.menu %}
+      <li>
+        {% if nav.anchor %}<a name="{{ nav.anchor }}"></a>{% endif %}
+        {% if nav.caption %}{% if nav.link %}<a href="{{ nav.link }}">{% endif %}{{ nav.caption }}{% if nav.link %}</a>{% endif %}{% endif %}
+        <ul>
+        {% for menu_item in nav.menu %}
+          {% if menu_item.anchor %}<a name="{{ menu_item.anchor }}"></a>{% endif %}
+          {% if menu_item.separator %}
+            <li class="mt1 mb1 {{ menu_item.separator }}">{{ menu_item.caption }}</li>
+          {% else %}
+            <li>{% if menu_item.link %}<a href="{{ menu_item.link }}">{% endif %}{{ menu_item.caption }}{% if menu_item.link %}</a>{% endif %}</li>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      </li>
+    {% else %}
+      {% if nav.anchor %}<a name="{{ nav.anchor }}"></a>{% endif %}
+      {% if nav.separator %}
+        <li class="mt1 mb1 {{ nav.separator }}">{{ nav.caption }}</li>
+      {% else %}
+        <li>{% if nav.link %}<a href="{{ nav.link }}">{% endif %}{{ nav.caption }}{% if nav.link %}</a>{% endif %}</li>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}
+
+{% if site %}
+  {{ exec({'widget':'navv'},site.data.widgets['navv'],site) }}
+{% endif %}

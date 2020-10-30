@@ -1,0 +1,94 @@
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set frameworkscript = theme.get('frameworkscript',site,page) %}
+{% set frameworkcss = theme.get('frameworkcss',site,page) %}
+{% set frameworkcsstheme = theme.get('frameworkcsstheme',site,page) %}
+{% set script_head = theme.get('script_head',site,page) %}
+{% set css = theme.get('css',site,page) %}
+{% set font1 = theme.get('font1',site,page) %}
+{% set font2 = theme.get('font2',site,page) %}
+{% set font3 = theme.get('font3',site,page) %}
+{% set touch_icon = theme.get('touch_icon',site,page) %}
+{% set favicon = theme.get('favicon',site,page) %}
+{% set navbar_layout = theme.get('navbar_layout',site,page) %}
+{% set navbar_layout = theme.get('navbar_layout',site,page) %}
+{% if page.collection %}{% set header = page.collection %}
+{% elif page.type == "blog" %}{% set header = site.blog %}
+{% endif %}
+{% set title = "" %}
+{% if page.title %}{% set title = page.title %}{% endif %}
+{% if header and header.title %}{% if title %}{% set title = title + ' : ' %}{% endif %}{% set title = title + header.title %}{% endif %}
+{% if site.title %}{% if title %}{% set title = title + ' : ' %}{% endif %}{% set title = title + site.title %}{% endif %}
+{% if page.meta_description %}{% set meta_description = page.meta_description %}
+{% elif header and header.meta_description %}{% set meta_description = header.meta_description %}
+{% else %}{% set meta_description = site.meta_description %}{% endif %}
+{% if description %}{% else %}
+{% if page.description %}{% set description = page.description %}
+{% elif header and header.description %}{% set description = header.description %}
+{% else %}{% set description = site.description %}{% endif %}
+{% endif %}
+{% if page.keywords %}{% set keywords = page.keywords %}
+{% elif header and header.keywords %}{% set keywords = header.keywords %}
+{% else %}{% set keywords = site.keywords %}{% endif %}
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set wallpaper_image = theme.get('wallpaper_image',site,page) %}
+{% set wallpaper_pattern = theme.get('wallpaper_pattern',site,page) %}
+{% set wallpaper_repeat = theme.get('wallpaper_repeat',site,page) %}
+{% set content_text_color = theme.get('content_text_color',site,page) %}
+{% if wallpaper_image %}
+  {% set body_style = 'background-image: url(' + site.baseurl + wallpaper_image + ');' %}
+  {% if wallpaper_repeat %}
+    {% set body_style = body_style + 'background-repeat: ' + wallpaper_repeat + ';' %}
+  {% else %}
+    {% set body_style = body_style + 'background-size: contain;' %}
+  {% endif %}
+{% elif wallpaper_pattern %}
+  {% set body_style = 'background-image: ' + wallpaper_pattern +';' %}
+{% endif %}
+{% if content_text_color %}
+  {% set body_style = body_style + 'color: ' + content_text_color +';' %}
+{% endif %}
+<head>
+  <meta charset="utf-8">
+  {% if page.disableamp %}{% else %}<script async src="{{ frameworkscript }}"></script>{% endif %}
+  <title>{{ title | truncate(64) }}</title>
+  {% if site.google_site_verification %}<meta name="google-site-verification" content="{{ site.google_site_verification }}" />{% endif %}
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  {% if meta_description != 'disable' %}<meta name="description" content="{{ description }}">{% endif %}
+  {% if keywords %}<meta name="keywords" content="{{ keywords }}">{% endif %}
+  <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url | replace('index.html','')}}">
+  <meta name="amp-google-client-id-api" content="googleanalytics">
+  {% if page.disableamp %}{% else %}<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+  {% endif %}
+  <style{% if page.disableamp %}{% else %} amp-custom=""{% endif %}>
+{# ******* CAUTION *********
+  When you include a large file and specify the file name with a variable,
+  the error "ValueError: unmarshallable object" occurs.
+  If you specify the file name with a string constant, no error occurs.
+************************** #}
+{% include "pages/css/basscss.amp.min.css" %}
+{% include "pages/css/ampstart.css" %}
+{% include "pages/css/rindow.css" %}
+{# if frameworkcss %}{% include frameworkcss %}{% endif #}
+{# if frameworkcsstheme %}{% include frameworkcsstheme %}{% endif #}
+{# if css %}{% include css %}{% endif #}
+{% if body_style %}body{{ '{'+body_style+'}' }}{% endif %}
+{% block custom_style %}
+{% endblock %}
+  </style>
+
+  <!-- font css -->
+  {% if font1 !="" %}<link rel="stylesheet" type="text/css" href="{{ font1 }}">{% endif %}
+  {% if font2 !="" %}<link rel="stylesheet" type="text/css" href="{{ font2 }}">{% endif %}
+  {% if font3 !="" %}<link rel="stylesheet" type="text/css" href="{{ font2 }}">{% endif %}
+  {% if touch_icon !="" %}<link rel="apple-touch-icon-precomposed" href="{{ site.baseurl }}{{ touch_icon }}">{% endif %}
+  {% if favicon !="" %}<link rel="icon" href="{{ site.baseurl }}{{ favicon }}">{% endif %}
+  {% if page.disableamp %}{% else %}
+    {% if site.amp_auto_ads %}<script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"></script>{% endif %}
+    {% if navbar_layout !="disable" %}<script custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js" async=""></script>{% endif %}
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    {% if script_head %}{{ script_head }}{% endif %}
+    {% if site.google_analytics_id %}
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    {% endif %}
+  {% endif %}
+</head>

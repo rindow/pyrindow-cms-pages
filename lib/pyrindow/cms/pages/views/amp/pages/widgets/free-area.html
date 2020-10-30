@@ -1,0 +1,18 @@
+{% macro exec(options,data,site) %}
+<div class="widgetwrapper widget-free-area widget-free-area-{{options.item}}">
+{% if options.item and data[options.item] %}
+  {% autoescape false %}
+  {% if options.markdownify %}
+    {{ data[options.item] | markdownify }}
+  {% else %}
+    {{ data[options.item] }}
+  {% endif %}
+  {% endautoescape %}
+{% else %}
+  Not found free area "{{ options.item }}"
+  {% if options.name %}
+   in {{ options.name }}
+  {% endif %}
+{% endif %}
+</div>
+{%- endmacro %}

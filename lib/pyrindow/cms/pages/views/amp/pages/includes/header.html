@@ -1,0 +1,56 @@
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set header_title_class = theme.get('header_title_class',site,page) %}
+{% set header_description_class = theme.get('header_description_class',site,page) %}
+{% if page.collection %}
+  {% set header = page.collection %}
+{% elif page.type == "blog" %}
+  {% set header = site.blog %}
+{% else %}
+  {% set header = page %}
+{% endif %}
+{% if header.header_style != "disable" and page.header_style != "disable" %}
+  {% set header_image = theme.get('header_image',site,page) %}
+  {% set header_image_width = theme.get('header_image_width',site,page) %}
+  {% set header_image_height = theme.get('header_image_height',site,page) %}
+  {% set header_image_srcset = theme.get('header_image_srcset',site,page) %}
+  {% set header_image_sizes = theme.get('header_image_sizes',site,page) %}
+  {% set header_image_heights = theme.get('header_image_heights',site,page) %}
+  {% set header_image_layout = theme.get('header_image_layout',site,page) %}
+  {% set header_pattern = theme.get('header_pattern',site,page) %}
+
+{% autoescape true %}
+<div role="banner" class="commerce-hero-content-wrapper center overflow-hidden">
+  {% if header_image and header_image!="disable" %}
+    {% if page.disableamp %}
+    <img class="commerce-hero-image fit" src="{{ site.baseurl + header_image }}" alt="Hero Landing 1" noloading="">
+    </img>
+    {% else %}
+    <amp-img class="commerce-hero-image"
+        src="{{ site.baseurl + header_image }}"
+        width="{{ header_image_width }}"
+        height="{{ header_image_height }}"
+        {% if header_image_srcset %}srcset="{{ header_image_srcset }}"{% endif %}
+        {% if header_image_sizes %}sizes="{{ header_image_sizes }}"{% endif %}
+        {% if header_image_heights %}heights="{{ header_image_heights }}"{% endif %}
+        {% if header_image_layout %}layout="{{ header_image_layout }}"{% endif %}
+        alt="Hero Landing 1"
+        noloading="">
+    </amp-img>
+    {% endif %}
+  {% elif header_pattern %}
+    <div class="commerce-hero-pattern"></div>
+  {% endif %}
+  <div class="commerce-hero-content commerce-hero-content-theme-primary flex justify-center flex-column md-mx-auto md-p0">
+    <div class="commerce-hero-align md-mx-auto">
+    {% if header.title %}
+      <h2 class="commerce-hero-content-title {{ header_title_class }}">{{ header.title }}</h2>
+      <p class="commerce-hero-content-body {{ header_description_class }}">{{ header.description }}</p>
+    {% else %}
+      <h2 class="commerce-hero-content-title {{ header_title_class }}">{{ site.title }}</h2>
+      <p class="commerce-hero-content-body {{ header_description_class }}">{{ site.description }}</p>
+    {% endif %}
+    </div>
+  </div>
+</div>
+{% endautoescape %}
+{% endif %}

@@ -1,5 +1,9 @@
 import os,yaml
 
+class RepositoryConfig(object):
+    def __init__(self, repository=None,path=None,value=None,debug_path=None):
+        pass
+
 class YamlConfig(object):
     def __init__(self,filename=None,path=None,value=None,debug_path=None):
         if debug_path:
@@ -7,8 +11,8 @@ class YamlConfig(object):
         else:
             self.debug_path = ''
         if filename:
-            stream = open(filename,'rb')
-            self.yaml = yaml.load(stream)
+            stream = open(filename,'r',encoding='utf-8')
+            self.yaml = yaml.safe_load(stream)
             stream.close()
             if path:
                 self.path = path
@@ -18,8 +22,8 @@ class YamlConfig(object):
             self.path = path
             filename = self._filename(path)
             if filename:
-                stream = open(filename,'rb')
-                self.yaml = yaml.load(stream)
+                stream = open(filename,'r',encoding='utf-8')
+                self.yaml = yaml.safe_load(stream)
                 stream.close()
             elif os.path.isdir(self.path):
                 self.yaml = {}
@@ -75,11 +79,11 @@ class YamlLoader(object):
         return value
 
     def file2dict(self,filename):
-        stream = open( filename,'rb')
-        config = yaml.load(stream)
+        stream = open( filename,'r',encoding='utf-8')
+        config = yaml.safe_load(stream)
         stream.close()
         return config
-    
+
     def _loadfiles(self,target):
         config = {}
         passfile = None
@@ -104,8 +108,8 @@ class CollectionProxy(object):
         self._entity = entity
     def __getattr__(self,name):
         if name=='name':
-            return self._entity.name
-        return self._entity.config.get(name)
+            return self._entity['name']
+        return self._entity['config'].get(name)
     def dumpConfig(self):
         return DictToYaml(self._entity.config)
     def clear(self):
@@ -116,42 +120,53 @@ class CollectionProxy(object):
     #       raise Exception('str')
 
 class DocumentProxy(object):
-    def __init__(self,entity):
+    def __init__(self,entity,documentManager,routeManager):
         self._entity = entity
         self._collection = 'unsolved'
+        self._documentManager = documentManager
+        self._routeManager = routeManager
         self.url = None
     def __getattr__(self,name):
         if name=='name':
-            return self._entity.name
+            return self._entity['name']
         elif name=='content':
-            return self._entity.content
+            return self._entity['content']
+        elif name=='date':
+            return self._entity['date']
 
-        return self._entity.headers.get(name)
+        return self._entity['headers'].get(name)
     def dumpHeaders(self):
         return DictToYaml(self._entity.headers)
     @property
     def collection(self):
         """Get collection entity"""
         if self._collection == 'unsolved':
-            self._collection = CollectionProxy(self._entity.collection)
+            self._collection = CollectionProxy(self._entity['collection'])
         return self._collection
     def findDocument(self,name):
         if name:
-            document = self._entity.findDocument(name)
+            document = self._documentManager.findOne(self.collection.name,name)
             if document:
-                return DocumentProxy(document)
+                return DocumentProxy(document,self._documentManager,self._routeManager)
         return None
     def clear(self):
         self._entity = None
         if isinstance(self._collection,CollectionProxy):
             self._collection.clear()
         self._collection = None
+    def getDocumentUrl(self,collection=None,name=None):
+        if collection==None:
+            collection = self.collection.name
+        if name==None:
+            name = self.name
+        return self._routeManager.getDocumentUrl(collection,name)
 
 def YamlToDict(textValue):
-    return yaml.load(textValue)
+    return yaml.safe_load(textValue)
 
 def DictToYaml(dictValue):
     return yaml.safe_dump(
             dictValue,
             default_flow_style=False,
-            allow_unicode=True).decode('utf-8')
+            allow_unicode=True
+        )

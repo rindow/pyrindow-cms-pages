@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html{% if page.disableamp %}{% else %} amp{% endif %}{% if site.lang %} lang="{{ site.lang }}"{% endif %}>
+{% include "pages/includes/head.html" %}
+  <body>
+    {% if page.disableamp %}
+      {% include "pages/services/google-analytics.html" %}
+    {% else %}
+      {% include "pages/services/google-amp-analytics.html" %}
+      {% include "pages/widgets/amp-auto-ads.html" %}
+    {% endif %}
+    {# include "pages/includes/top-scripts.html" #}
+    {% block layout %}{% endblock %}
+    {# include "pages/includes/bottom-scripts.html" #}
+  </body>
+</html>

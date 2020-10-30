@@ -1,0 +1,14 @@
+{% extends "pages/layouts/default.html" %}
+{% block main %}
+<div class="blog">
+{% include "pages/widgets/post-navigator.html" %}
+{% include post.html post=page %}
+{% if site.blog.share %}<div class="share text-right">
+	{% include "pages/widgets/share-button.html" %}
+</div>{% endif %}
+{% include "pages/widgets/post-navigator.html" %}
+{% if site.blog.comment %}<div class="comments">
+	{% include "pages/widgets/comment.html" %}
+</div>{% endif %}
+</div>
+{% endblock %}

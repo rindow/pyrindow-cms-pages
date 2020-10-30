@@ -1,0 +1,17 @@
+{% macro get(name,args,site) -%}
+{% if args.options %}
+  {% set widget_options = args.options %}
+{% else %}
+  {% set widget_options = args %}
+{% endif %}
+{%- endmacro %}
+{% macro widget_data(name,args,site) -%}
+{% set widget_options = get(name,args,site) %}
+{% if widget_options.realm %}
+  {% set widget_data = site.data.realms[widget_options.realm].widgets[name] %}
+{% elsif args.data %}
+  {% set widget_data = args.data %}
+{% else %}
+  {% set widget_data = site.data.widgets[name] %}
+{% endif %}
+{%- endmacro %}

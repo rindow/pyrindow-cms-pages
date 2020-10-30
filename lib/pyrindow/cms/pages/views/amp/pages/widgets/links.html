@@ -1,0 +1,17 @@
+{% macro exec(options,data,site) %}
+<div class="widgetwrapper widget-links">
+  {% if options.anchor %}<a name="{{ options.anchor }}"></a>{% endif %}
+  <h4>{% if options.caption %}{{ options.caption }}{% else %}Links{% endif %}</h4>
+  <ul>
+    {% for link in data.links %}
+      <li>
+        <a href="{{ link.url }}">{{ link.caption }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}
+
+{% if site %}
+  {{ exec({'widget':'links'},site.data.widgets['links'],site) }}
+{% endif %}

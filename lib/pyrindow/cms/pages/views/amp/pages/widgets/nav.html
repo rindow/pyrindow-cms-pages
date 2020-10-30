@@ -1,0 +1,37 @@
+{% macro exec(options,data,site) %}
+<div class="widgetwrapper widget-links">
+  {% if options.anchor %}<a name="{{ options.anchor }}"></a>{% endif %}
+  {% if options.caption %}<h4>{{ options.caption }}</h4>{% endif %}
+  <ul class="list-reset">
+  {% for nav in data[options.item] %}
+    {% if nav.menu %}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ nav.caption }}<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+        {% for menu_item in nav.menu %}
+          {% if menu_item.separator %}
+            <li class="{{ menu_item.separator }}">{{ menu_item.caption }}</li>
+          {% else %}
+            <li><a class="inline-block mr1" href="{{ menu_item.link }}">{{ menu_item.caption }}</a></li>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      </li>
+    {% elif nav.search %}
+      <form  class="inline-block mr1" id="cse-search-box" action="{{ nav.search.action }}" target="_top">
+        <input type="hidden" name="cx" value="{{ nav.search.search_engine_id }}" />
+        <input type="hidden" name="ie" value="UTF-8" />
+        <input type="text" name="q" size="{{ nav.search.size }}" />
+        <input type="submit" name="sa" value="{{ nav.caption }}" />
+      </form>
+    {% else %}
+      <li class="inline-block mr1"><a href="{{ nav.link }}">{{ nav.caption }}</a></li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}
+
+{% if site %}
+  {{ exec({'widget':'nav'},site.data.widgets['nav'],site) }}
+{% endif %}

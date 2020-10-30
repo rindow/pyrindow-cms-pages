@@ -1,0 +1,77 @@
+{% extends "pages/layouts/frame.html" %}
+{% block layout %}
+{% import "pages/includes/sidearea.html" as sidearea %}
+{% import 'pages/includes/get-theme-value.html' as theme %}
+{% set header_style = theme.get('header_style',site,page) %}
+{% set navbar_layout = theme.get('navbar_layout',site,page) %}
+{% set sidearea_layout = theme.get('sidearea_layout',site,page) %}
+{% if header_style == "fit" %}<div class="container">{% endif %}
+{% if navbar_layout == "top" %}{% include "pages/includes/navbar.html" %}{% endif %}
+{% include "pages/includes/header.html" %}
+{{ sidearea.sidearea("header",site,page) }}
+{% if navbar_layout == "middle" %}{% include "pages/includes/navbar.html" %}{% endif %}
+{% if header_style != "fit" %}<div class="container">{% endif %}
+  <div class="main">
+    <div class="clearfix">
+      <div class="sm-col sm-col-12 pl2 pr2 border-bottom top-menu">
+        <section id="top">
+        {{ sidearea.sidearea("top",site,page) }}
+        </section>
+      </div>
+    </div>
+    <div class="clearfix">
+    {% if sidearea_layout == "right" %}
+      <div class="sm-col sm-col-9 p2">
+        <section><!-- main -->
+    {% elif sidearea_layout == "left" %}
+      <div class="sm-col-right sm-col-9 p2">
+        <section><!-- main -->
+    {% elif sidearea_layout == "both" %}
+      <div class="sm-col sm-col-3 p2">
+        <section id="side">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+      <div class="sm-col sm-col-6 p2">
+        <section><!-- main -->
+    {% else %}
+      <div class="sm-col sm-col-12 p2">
+        <section><!-- main -->
+    {% endif %}
+        {% block main %}{% endblock %}
+    {% if sidearea_layout == "right" %}
+        </section><!-- end main -->
+      </div>
+      <div class="sm-col sm-col-3 p2">
+        <section id="side">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+    {% elif sidearea_layout == "left" %}
+        </section>
+      </div>
+      <div class="sm-col sm-col-3 p2">
+        <section id="side">
+        {{ sidearea.sidearea("primary",site,page) }}
+        </section>
+      </div>
+    {% elif sidearea_layout == "both" %}
+        </section>
+      </div>
+      <div class="sm-col sm-col-3 p2">
+        <section id="side2">
+        {{ sidearea.sidearea("secondary",site,page) }}
+        </section>
+      </div>
+    {% else %}
+        </section>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+  {% include "pages/includes/footer.html" %}
+{% if header_style != "fit" %}</div><!-- /.container -->{% endif %}
+{% if navbar_layout == "bottom" %}{% include "pages/includes/navbar.html" %}{% endif %}
+{% if header_style == "fit" %}</div><!-- /.container -->{% endif %}
+{{ sidearea.sidearea("floating",site,page) }}
+{% endblock %}
